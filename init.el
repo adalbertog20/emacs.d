@@ -5,12 +5,8 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key [f9] 'code-compile)
 (electric-pair-mode t)
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "sbcl")
-
-(setq inhibit-splash-screen nil)
+(setq inhibit-splash-screen t)
 
 (defun efs/display-startup-time ()
   (message "Emacs loaded in %s with %d garbage collections."
@@ -18,11 +14,10 @@
                    (float-time
                    (time-subtract after-init-time before-init-time)))
            gcs-done))
-(add-hook 'c-mode-hook #'tree-sitter-hl-mode)
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
-(set-face-attribute 'default nil :font "Iosevka Nerd Font-14")
-(setq inhibit-startup-message nil)
+(set-face-attribute 'default nil :font "JetBrainsMono NF-14")
+(setq inhibit-startup-message t)
 (setq-default tab-width 4)
 (setq tab-width 4)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -39,12 +34,12 @@
 
 (delete-selection-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-fullscreen)
-(tool-bar-mode -1)                   
-(menu-bar-mode -1)                   
-(scroll-bar-mode -1)                 
-(set-fringe-mode 10)                 
-(tooltip-mode -1)                    
-(global-visual-line-mode t)          
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(set-fringe-mode 10)
+(tooltip-mode -1)
+(global-visual-line-mode t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq default-directory "C:\\Users\\rusty\\.emacs.d\\")
@@ -60,17 +55,6 @@
   scroll-step 1
   scroll-conservatively 10000
   scroll-preserve-screen-position 1)
-
-(defun code-compile ()
-  (interactive)
-  (unless (file-exists-p "Makefile")
-    (set (make-local-variable 'compile-command)
-     (let ((file (file-name-nondirectory buffer-file-name)))
-       (format "%s -o %s %s"
-           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
-           (file-name-sans-extension file)
-           file)))
-    (compile compile-command)))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -116,15 +100,18 @@
   :ensure t)
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
-(use-package smex
+(use-package amx
   :ensure t
-  :bind
-  ("M-x" . smex))
+  :config (amx-mode))
 
 (use-package neotree
   :ensure t
   :bind
   ("C-c o t" . neotree))
+
+(use-package ido-completing-read+
+  :ensure t
+  :custom (ido-ubiquitous-mode 1))
 
 (use-package ido
   :config (ido-mode 1)
@@ -158,14 +145,10 @@
   :bind
   ("<f5>" . deadgrep))
 
-(use-package flycheck
-  :ensure t
-  :hook (prog-mode . flycheck-mode))
-
-(use-package seoul256-theme
+(use-package gruber-darker-theme
   :ensure t
   :config
-  (load-theme 'seoul256 t))
+  (load-theme 'gruber-darker t))
 
 (use-package solaire-mode
   :ensure t
