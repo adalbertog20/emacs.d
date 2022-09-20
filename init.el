@@ -2,8 +2,8 @@
       user-mail-address "mistergamer37@gmail.com")
 (setq default-directory "C:/Users/rusty/Desktop/prog/")
 (setq visible-bell 1)
-(set-face-attribute 'default nil :font "JetBrainsMonoNL NFM-12" )
 (load-theme 'modus-vivendi t)
+(set-face-attribute 'default nil :font "JetBrainsMonoNL NFM-10" )
 (global-set-key "\C-x\C-m" 'compile)
 (dolist (mode '(org-mode-hook
                 term-mode-hook
@@ -25,9 +25,10 @@
 (setq frame-title-format '("" "%b - Living The Dream (•̀ᴗ•́)و"))
 (setq display-time-format "%a %b %d ╱ %r") ;; E.g.,:  Fri Mar 04 ╱ 03:42:08 pm
 (setq display-time-interval 1) ;; Please update the time every second.
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative)
 (display-time-mode)
-(global-linum-mode 1)
-(global-hl-line-mode t)
+
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -59,12 +60,24 @@
 (ido-everywhere 1)
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
+
+(use-package mood-line
+  :init (mood-line-mode))
+
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+(use-package elcord
+  :hook (prog-mode . elcord-mode))
+
 (use-package rainbow-delimiters
   :hook ((org-mode prog-mode text-mode) . rainbow-delimiters-mode))
+
 (use-package web-mode
   :mode ("\\.phtml\\'" "\\.tpl\\.php\\'" "\\.tpl\\'" "\\.blade\\.php\\'" "\\.jsp\\'" "\\.as[cp]x\\'"
          "\\.erb\\'" "\\.html.?\\'" "/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'"
          "\\.jinja2?\\'" "\\.mako\\'" "\\.vue\\'" "_template\\.txt" "\\.ftl\\'"))
+
 (use-package emmet-mode
   :hook (web-mode sgml-mode css-mode)
   :bind (:map emmet-mode-keymap
@@ -190,8 +203,18 @@
 
 (use-package yasnippet)
 (use-package yasnippet-snippets)
-(yas-global-mode 1)
+(add-hook 'prog-mode-hook 'yas-global-mode)
 
+(use-package flycheck
+  :ensure t
+  :hook (prog-mode . global-flycheck-mode))
+
+;; SQL SHIT
+(setq sql-mysql-options '("-C" "-f" "-t" "-n")) ; for windows
+(add-to-list 'same-window-buffer-names "*SQL*")
+
+(use-package sqlup-mode
+  :hook (sql-mode . sqlup-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
