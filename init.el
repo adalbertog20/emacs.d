@@ -2,15 +2,19 @@
       user-mail-address "mistergamer37@gmail.com")
 (setq default-directory "C:/Users/rusty/Desktop/prog/")
 (setq visible-bell 1)
+(pending-delete-mode t)
 (load-theme 'modus-vivendi t)
 (set-face-attribute 'default nil :font "JetBrainsMonoNL NFM-10" )
 (global-set-key "\C-x\C-m" 'compile)
+
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 shell-mode-hook
                 treemacs-mode-hook
-                eshell-mode-hook))
+                eshell-mode-hook
+		dired-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 (setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
       vc-make-backup-files t
       version-control t
@@ -23,12 +27,7 @@
       initial-scratch-message "Caution, this pc has been caught with ilegal content."
       cursor-type 'hollow)
 (setq frame-title-format '("" "%b - Living The Dream (•̀ᴗ•́)و"))
-(setq display-time-format "%a %b %d ╱ %r") ;; E.g.,:  Fri Mar 04 ╱ 03:42:08 pm
-(setq display-time-interval 1) ;; Please update the time every second.
-(global-display-line-numbers-mode 1)
-(setq display-line-numbers-type 'relative)
 (display-time-mode)
-
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -215,6 +214,20 @@
 
 (use-package sqlup-mode
   :hook (sql-mode . sqlup-mode))
+
+;;end sql
+
+(use-package ace-jump-mode
+  :bind ("C-c t" . ace-jump-mode)
+  ("C-c l" . ace-jump-line-mode))
+
+;;DIRED
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+(use-package dired-single)
+
+(use-package dired-hide-dotfiles
+  :hook (dired-mode . dired-hide-dotfiles-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
